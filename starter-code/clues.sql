@@ -2,18 +2,26 @@
 -- traveling through Southern Europe. She's most likely traveling someplace where she won't be noticed,
 -- so find the least populated country in Southern Europe, and we'll start looking for her there.
 
-
+select * FROM country where region like '%Southern Europe%' order by population; 
+Holy See (Vatican City State)
 
 -- Clue #2: Now that we're here, we have insight that Carmen was seen attending language classes in
 -- this country's officially recognized language. Check our databases and find out what language is
 -- spoken in this country, so we can call in a translator to work with you.
 
+select "language", isofficial FROM countrylanguage where countrycode like '%VAT%'; 
 
+Italian, isofficial == true 
 
 -- Clue #3: We have new news on the classes Carmen attended – our gumshoes tell us she's moved on
 -- to a different country, a country where people speak only the language she was learning. Find out which
 --  nearby country speaks nothing but that language.
 
+#found the percentage of Italian speakers in countrcode VAT
+select countrycode, "language", percentage FROM countrylanguage where "language" like '%Italian%'; 
+#found the city name of countrycode given for 100% Italian speaking: result was Serravalle, San Marino
+select name FROM city where countrycode LIKE '%SMR%'; 
+-- She's in country San Marino
 
 
 -- Clue #4: We're booking the first flight out – maybe we've actually got a chance to catch her this time.
@@ -21,19 +29,25 @@
  -- would be too obvious. We're following our gut on this one; find out what other city in that country she might
  --  be flying to.
 
-
+select * from city where countrycode='SMR';
+-- She is in Serravalle
 
 -- Clue #5: Oh no, she pulled a switch – there are two cities with very similar names, but in totally different
 -- parts of the globe! She's headed to South America as we speak; go find a city whose name is like the one we were
 -- headed to, but doesn't end the same. Find out the city, and do another search for what country it's in. Hurry!
 
-
+#we found a like named city to Serravalle
+select * FROM city where name LIKE '%Serr%';
+#now will use countrycode to identify South American country
+select name FROM country where code LIKE '%BRA%';
+#The country is Brazil
 
 -- Clue #6: We're close! Our South American agent says she just got a taxi at the airport, and is headed towards
  -- the capital! Look up the country's capital, and get there pronto! Send us the name of where you're headed and we'll
  -- follow right behind you!
 
-
+#The Capital is Brasilia.
+select * from city where countrycode like '%BRA%';
 
 -- Clue #7: She knows we're on to her – her taxi dropped her off at the international airport, and she beat us to
  -- the boarding gates. We have one chance to catch her, we just have to know where she's heading and beat her to the
@@ -53,5 +67,7 @@
 -- We're counting on you, gumshoe. Find out where she's headed, send us the info, and we'll be sure to meet her at the gates with bells on.
 
 
+select * FROM city where population=91084
+-- Santa Monica
 
 -- She's in ____________________________!
